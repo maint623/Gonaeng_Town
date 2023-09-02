@@ -5,14 +5,16 @@ import org.bukkit.World;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
 import static maint.gonaeng_town.Gonaeng_Town.connection;
+import static org.bukkit.Bukkit.getServer;
 
 public class DB_TownCreate {
-    public static void TownCreateInsert(UUID userid, String TownName, double LLocX, double LLocZ, double RLocX, double RLocZ, World world) {
-        String sql = "insert into townloc (CreateUserID, TownName, LLocX, LLocZ, RLocX, RLocZ, World) values ('" + userid +"','" + TownName +"','" + LLocX +"','" + LLocZ +"','" + RLocX +"','" + RLocZ +"','" + world +"');";
+    public static void TownCreateInsert(UUID userid, String TownName, double LLocX, double LLocZ, double RLocX, double RLocZ, String world, int Block) {
+        String sql = "insert into townloc (CreateUserID, TownName, LLocX, LLocZ, RLocX, RLocZ, World, Block) values ('" + userid +"','" + TownName +"','" + LLocX +"','" + LLocZ +"','" + RLocX +"','" + RLocZ +"','" + world +"','" + Block +"');";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.executeUpdate(sql);
@@ -21,8 +23,8 @@ public class DB_TownCreate {
             e.printStackTrace();
         }
     }
-    public static void TownAriaUpdate(UUID userid, double LLocX, double LLocZ, double RLocX, double RLocZ, World world) {
-        String sql = "update playtime set LLocX='"+LLocX+"',LLocY='"+LLocZ+"',RLocX='"+RLocX+"',RLocY='"+RLocZ+"',World='"+world+"' where CreateUserID='"+userid+"';";
+    public static void TownAriaUpdate(UUID userid, double LLocX, double LLocZ, double RLocX, double RLocZ, String world, int Block) {
+        String sql = "update townloc set LLocX='"+LLocX+"',LLocZ='"+LLocZ+"',RLocX='"+RLocX+"',RLocZ='"+RLocZ+"',World='"+world+"',Block='"+Block+"' where CreateUserID='"+userid+"';";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.executeUpdate(sql);
@@ -31,22 +33,46 @@ public class DB_TownCreate {
             throw new RuntimeException(e);
         }
     }
-    public static Integer TownCreateSelect(UUID userid) {
-        String sql = "select * from playtime where UserID='"+userid+"';";
+    public static World getTownWorld(UUID userid) {
+        String sql = "select * from townloc where CreateUserID='"+userid+"';";
+        World world = null;
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery(sql);
-            int count = 0;
             while(true){
                 try {
                     if (!Objects.requireNonNull(rs).next()) break;
-                    count = rs.getInt("PlaySecond");
+                    world = getServer().getWorld(rs.getString("World"));
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
             }
             rs.close();
-            return count;
+            return world;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static ArrayList<Double> TownCreateSelect(UUID userid) {
+        String sql = "select * from townloc where CreateUserID='"+userid+"';";
+        ArrayList<Double> Loc = new ArrayList<>();
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery(sql);
+            while(true){
+                try {
+                    if (!Objects.requireNonNull(rs).next()) break;
+                    Loc.add(rs.getDouble("LLocX"));
+                    Loc.add(rs.getDouble("LLocZ"));
+                    Loc.add(rs.getDouble("RLocX"));
+                    Loc.add(rs.getDouble("RLocZ"));
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            rs.close();
+            return Loc;
         } catch (SQLException e) {
             e.printStackTrace();
         }
