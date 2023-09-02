@@ -1,0 +1,6 @@
+name: Gonaeng_Town
+version: '0.1'
+main: maint.gonaeng_town.Gonaeng_Town
+api-version: '1.20'
+commands:
+  마을:
