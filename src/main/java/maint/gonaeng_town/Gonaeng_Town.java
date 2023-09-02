@@ -1,5 +1,6 @@
 package maint.gonaeng_town;
 
+import maint.gonaeng_town.Town_Event.Event_Create;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,7 +22,7 @@ public final class Gonaeng_Town extends JavaPlugin {
         INSTANCE = this;
         setConfig();
         DBConnect();
-        getServer().getPluginManager().registerEvents(new Create_Event(), this);
+        getServer().getPluginManager().registerEvents(new Event_Create(), this);
         getCommand("마을").setExecutor(new Town_Command());
     }
     void DBConnect(){
