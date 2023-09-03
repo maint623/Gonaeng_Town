@@ -7,11 +7,34 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
+import static maint.gonaeng_town.Gonaeng_Town.TownAria;
+
 public class Manager_Location {
     public static HashMap<UUID, BukkitRunnable> Ptasks = new HashMap<>();
+    public static void TownAriaUpdate(int LocX1, int LocZ1, int LocX2, int LocZ2, String playerUUID){
+        int X1 = Math.round(LocX1);
+        int X2 = Math.round(LocZ1);
+        int Z1 = Math.round(LocX2);
+        int Z2 = Math.round(LocZ2);
+        ArrayList<ArrayList<Integer>> Array = new ArrayList<>();
+        Array.add(getAllLoc(X1,X2)); // X
+        Array.add(getAllLoc(Z1,Z2)); // Z
+        TownAria.put(playerUUID.toString(),Array);
+    }
+    public static ArrayList<Integer> getAllLoc(int X1, int X2){
+        int XLocMin = Math.min(X1, X2);
+        int XLocMax = Math.max(X1, X2);
+        ArrayList<Integer> LocInteger = new ArrayList<>();
+        for(int i = XLocMin; i<XLocMax+1;){
+            LocInteger.add(i);
+            i++;
+        }
+        return LocInteger;
+    }
     public static int getTownAriaBlock(double LLoc1, double LLoc2, double RLoc1, double RLoc2){
         int ILLoc1 = (int) Math.round(LLoc1);
         int ILLoc2 = (int) Math.round(LLoc2);
@@ -36,10 +59,10 @@ public class Manager_Location {
             @Override
             public void run() {
                 Location loc1 = new Location(world,XLoc1,PL.getY(),ZLoc1);
-                loc1.add(-0.5,0.7,-0.5);
+                loc1.add(0.5,0.7,-0.5);
 
                 Location loc2 = new Location(world,XLoc2,PL.getY(),ZLoc1);
-                loc2.add(-0.5,0.7,-0.5);
+                loc2.add(0.5,0.7,-0.5);
 
                 for(int i = 0; i < Math.abs(ILLoc2-IRLoc2)+1;){
                     world.spawnParticle(Particle.REDSTONE, loc1, 50, 0.1, 0.1, 0.1, 0, dustOptions);
@@ -50,10 +73,10 @@ public class Manager_Location {
                 }
 
                 Location loc3 = new Location(world,XLoc1,PL.getY(),ZLoc1);
-                loc3.add(-0.5,0.7,-0.5);
+                loc3.add(0.5,0.7,-0.5);
 
                 Location loc4 = new Location(world,XLoc1,PL.getY(),ZLoc2);
-                loc4.add(-0.5,0.7,-0.5);
+                loc4.add(0.5,0.7,-0.5);
 
                 for(int i = 0; i < Math.abs(ILLoc1-IRLoc1)+1;){
                     world.spawnParticle(Particle.REDSTONE, loc3, 50, 0.1, 0.1, 0.1, 0, dustOptions);
