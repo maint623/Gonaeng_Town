@@ -95,6 +95,10 @@ public class Event_Create implements Listener {
                 if (event.getHand() == EquipmentSlot.HAND) {
                     if (player.getInventory().getItemInMainHand().getType() == Material.GOLDEN_HOE) {
                         event.setCancelled(true);
+                        if(Ptasks.containsKey(playerUUID)){
+                            Ptasks.get(playerUUID).cancel();
+                            Ptasks.remove(playerUUID);
+                        }
                         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                             ArrayList<String> Aria = new ArrayList<>();
                             Aria.add(SelectAria.get(playerUUID).get(0));
@@ -102,7 +106,7 @@ public class Event_Create implements Listener {
                             SelectAria.put(playerUUID, Aria);
                             ArrayList<Location> AriaLoc = new ArrayList<>();
                             AriaLoc.add(SelectAriaLoc.get(playerUUID).get(0));
-                            AriaLoc.add(event.getClickedBlock().getLocation().add(1,0,1));
+                            AriaLoc.add(event.getClickedBlock().getLocation().add(0,0,1));
                             SelectAriaLoc.put(playerUUID, AriaLoc);
                             tasks.get(playerUUID).cancel();
                             tasks.put(playerUUID, SelectMessage(player, playerUUID));
@@ -113,7 +117,7 @@ public class Event_Create implements Listener {
                             Aria.add(SelectAria.get(playerUUID).get(1));
                             SelectAria.put(playerUUID, Aria);
                             ArrayList<Location> AriaLoc = new ArrayList<>();
-                            AriaLoc.add(event.getClickedBlock().getLocation().add(1,0,1));
+                            AriaLoc.add(event.getClickedBlock().getLocation().add(0,0,1));
                             AriaLoc.add(SelectAriaLoc.get(playerUUID).get(1));
                             SelectAriaLoc.put(playerUUID, AriaLoc);
                             tasks.get(playerUUID).cancel();
