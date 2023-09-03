@@ -23,7 +23,7 @@ public class DB_TownCreate {
             e.printStackTrace();
         }
     }
-    public static void TownAriaUpdate(UUID userid, double LLocX, double LLocZ, double RLocX, double RLocZ, String world, int Block) {
+    public static void TownAriaUpdates(UUID userid, double LLocX, double LLocZ, double RLocX, double RLocZ, String world, int Block) {
         String sql = "update townloc set LLocX='"+LLocX+"',LLocZ='"+LLocZ+"',RLocX='"+RLocX+"',RLocZ='"+RLocZ+"',World='"+world+"',Block='"+Block+"' where CreateUserID='"+userid+"';";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -49,6 +49,17 @@ public class DB_TownCreate {
             }
             rs.close();
             return world;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static ResultSet getTownRS() {
+        String sql = "select * from townloc;";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery(sql);
+            return rs;
         } catch (SQLException e) {
             e.printStackTrace();
         }
